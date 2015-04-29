@@ -1,6 +1,8 @@
 
 package edu.cpp.cs445;
 
+import static org.lwjgl.opengl.GL11.glVertex3f;
+
 /**
  * Stores 3 floats that represent a point in 3d space.
  * It is also used to store other 3-vector values such
@@ -8,7 +10,7 @@ package edu.cpp.cs445;
  * 
  * @author Bryan Thornbury
  */
-public class Coordinate3D {
+public class Coordinate3D implements IDrawable{
     private float x;
     private float y;
     private float z;
@@ -42,5 +44,10 @@ public class Coordinate3D {
     
     public void setZ(float z){
         this.z = z;
+    }
+
+    @Override
+    public void draw() {
+        glVertex3f(x,y,z);
     }
 }

@@ -1,12 +1,6 @@
 package edu.cpp.cs445;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -18,10 +12,8 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * Course:      CS 445 Computer Graphics
  * Professor:  Tony Diaz
- * Assignment: Final FProgram
+ * Assignment: Final Program
  * 
- * This Program Reads in Polygon definitions from "./coordinates.txt"
- * and draws those polygons.
  * 
  * @author Bryan Thornbury
  * @author 
@@ -50,7 +42,7 @@ public class Program {
          
          
         glMatrixMode(GL_PROJECTION);
-        glOrtho(0 , WIDTH, 0, HEIGHT, 1, -1);
+        glOrtho(-WIDTH/2 , WIDTH/2, -HEIGHT/2, HEIGHT/2, 100, -100);
         glMatrixMode(GL_MODELVIEW);
          
        
@@ -58,10 +50,21 @@ public class Program {
     }
     
     public static void loop(){
+        System.out.println("loop");
+        Cube c = new Cube(new Coordinate3D(-50,-50,-10), 100, 100, 100);
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT);
             
             //Do Stuff
+            glLoadIdentity();
+            glRotatef(33f,0f,0f,1f);
+            glRotatef(10f, 1,0,0);
+            
+            glBegin(GL_QUADS);
+            //glColor3f(1,1,1);
+            c.draw();
+            glEnd();
+            
             Display.update();
             
             //Sync w/ FPS value
