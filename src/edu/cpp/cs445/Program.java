@@ -5,7 +5,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-
+import org.lwjgl.util.glu.GLU; 
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -16,69 +16,84 @@ import static org.lwjgl.opengl.GL11.*;
  * 
  * 
  * @author Bryan Thornbury
- * @author 
+ * @author Renita Priya
  * @author
  */
 public class Program {
     
-    private static final Integer FPS = 10;
-    private static final Integer WIDTH = 640;
-    private static final Integer HEIGHT = 480;
+     private static final Integer FPS = 10;
+    // private static final Integer WIDTH = 640;
+    // private static final Integer HEIGHT = 480;
     
+    private FPCameraController fp = new FPCameraController(0f,0f,0f);
+    private DisplayMode displayMode;
     
     
     //Simply set up the opengl viewport and Display
-    public static void setup(){
+    public void start(){
          
-        
          try {
-            Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-            Display.create();
-        } catch (LWJGLException e) {
+            createWindow();
+            initGL();
+            fp.gameLoop(); 
+        } catch (Exception e) {
             e.printStackTrace();
             Display.destroy();
             System.exit(1);
         }
          
-         
-        glMatrixMode(GL_PROJECTION);
-        glOrtho(-WIDTH/2 , WIDTH/2, -HEIGHT/2, HEIGHT/2, 100, -100);
-        glMatrixMode(GL_MODELVIEW);
-         
-       
+ 
          
     }
     
-    public static void loop(){
-        System.out.println("loop");
-        Cube c = new Cube(new Coordinate3D(-50,-50,-10), 100, 100, 100);
-        while (!Display.isCloseRequested()) {
-            glClear(GL_COLOR_BUFFER_BIT);
-            
-            //Do Stuff
-            glLoadIdentity();
-            glRotatef(33f,0f,0f,1f);
-            glRotatef(10f, 1,0,0);
-            
-            glBegin(GL_QUADS);
-            //glColor3f(1,1,1);
-            c.draw();
-            glEnd();
-            
-            Display.update();
-            
-            //Sync w/ FPS value
-            Display.sync(FPS);
-            
-            //Listen for escape key to exit
-            while (Keyboard.next()) {
-                if (Keyboard.getEventKeyState()) {
-                    if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
-                        System.exit(0);
-                    }
-                }
+    private void createWindow() throws Exception{
+        Display.setFullscreen(false);
+        DisplayMode d[] = Display.getAvailableDisplayModes();
+        for (int i = 0; i < d.length; i++) {
+            if (d[i].getWidth() == 640 && d[i].getHeight() == 480 && d[i].getBitsPerPixel() == 32) {
+                displayMode = d[i];
+                break;
             }
         }
+        Display.setDisplayMode(displayMode);
+        Display.setTitle("My Graphics Window!");
+        Display.create();
+
+    }
+    
+    private void initGL(){
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        
+        GLU.gluPerspective(100.0f, (float)displayMode.getWidth()/(float)displayMode.getHeight(), 0.1f, 300.0f);
+        glMatrixMode(GL_MODELVIEW);
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+            
+    }
+public static void loop(){
+    System.out.println("loop");
+     while (!Display.isCloseRequested()) {
+         glClear(GL_COLOR_BUFFER_BIT);
+
+         //Do Stuff
+         glBegin(GL_QUADS);
+         glEnd();
+         Display.update();
+
+         //Sync w/ FPS value
+         Display.sync(FPS);
+
+         //Listen for escape key to exit
+         while (Keyboard.next()) {
+             if (Keyboard.getEventKeyState()) {
+                 if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
+                     System.exit(0);
+                 }
+             }
+         }
+     }
         
     }
 
@@ -86,12 +101,8 @@ public class Program {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       
-        setup();
-        loop();
-
-        Display.destroy();
-        System.exit(0);
+        Program ourProject = new Program();
+        ourProject.start(); 
     }
     
 }

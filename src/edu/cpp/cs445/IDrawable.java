@@ -7,7 +7,7 @@ package edu.cpp.cs445;
 
 /**
  *
- * @author mozoby
+ * @author Bryan Thornbury
  */
 public interface IDrawable {
     public void draw();
