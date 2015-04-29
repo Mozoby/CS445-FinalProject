@@ -32,7 +32,7 @@ public class FPCameraController {
         lPosition.y = 15f;
         lPosition.z = 0f;
         
-        c = new Cube(new Coordinate3D(10,10,10), 100, 100, 100);
+        c = new Cube(new Coordinate3D(-50,-50,-200), 100, 100, 100);
     }
     
     //increment the camera's current yaw rotation
