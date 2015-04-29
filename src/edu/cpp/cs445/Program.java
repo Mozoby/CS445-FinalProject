@@ -70,6 +70,10 @@ public class Program {
         GLU.gluPerspective(100.0f, (float)displayMode.getWidth()/(float)displayMode.getHeight(), 0.1f, 300.0f);
         glMatrixMode(GL_MODELVIEW);
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        // Enable depth test
+        glEnable(GL_DEPTH_TEST);
+        // Accept fragment if it closer to the camera than the former one
+        glDepthFunc(GL_LESS);
             
     }
 public static void loop(){

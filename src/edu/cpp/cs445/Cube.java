@@ -30,13 +30,12 @@ public class Cube extends BaseMesh implements ITransformable{
         Coordinate3D[] vertices= new Coordinate3D[8];
         
         /*
-          4.___.5
-          /   /|
-         /   / |  
-       2.___.3 .7              The occluded vertice is 6
-        |   | /
-        |   |/
-       0.---.1
+         6---7
+        /|  /|
+       2---3 |
+       | 4-|-5
+       |/  |/ 
+       0---1
         
         */
         
@@ -63,15 +62,13 @@ public class Cube extends BaseMesh implements ITransformable{
         super(vertices, MeshType.Quad);
         
         //1 for each face
-        colors = new Coordinate3D[6];
-        for(int i = 0; i < 6; i++){
+      
+        colors = new Coordinate3D[8];
+        for(int i = 0; i < 8; i++){
             float r = (i & 4);
             float g = (i & 2);
             float b = (i & 1);
             
-            if (r == 0 && b == 0 && g == 0){
-                r = 1;
-            }
             colors[i] = new Coordinate3D(r, g, b);
         }
     }
@@ -82,10 +79,10 @@ public class Cube extends BaseMesh implements ITransformable{
     public void draw(){
         //Custom cube draw algo
         //Condenses 24 vertices of 4 different quads into only 8
-        int c = 0;
+        int c = 1;
         
-        //front, top, back, bottom
-        for(int b = 0; b < this.vertList.size(); b += 2){
+        for(int b = 0; b < 8; b+=2){
+            
             glColor3f(colors[c].getX(), colors[c].getY(), colors[c].getZ());
             vertList.get(b).draw();
             vertList.get(b + 1).draw();
