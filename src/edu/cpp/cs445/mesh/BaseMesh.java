@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.cpp.cs445;
+package edu.cpp.cs445.mesh;
 
+import edu.cpp.cs445.Coordinate3D;
 import java.util.ArrayList;
 import java.util.List;
 

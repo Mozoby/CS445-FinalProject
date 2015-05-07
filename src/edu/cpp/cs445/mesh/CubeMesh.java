@@ -1,17 +1,18 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.cpp.cs445;
+package edu.cpp.cs445.mesh;
 
+import edu.cpp.cs445.Coordinate3D;
 import static org.lwjgl.opengl.GL11.glColor3f;
 
 /**
  *
  * @author BryanThornbury
  */
-public class Cube extends BaseMesh implements ITransformable{
+public class CubeMesh extends BaseMesh implements ITransformable{
     
     private Coordinate3D scale;
     private Coordinate3D translation;
@@ -30,10 +31,10 @@ public class Cube extends BaseMesh implements ITransformable{
         Coordinate3D[] vertices= new Coordinate3D[8];
         
         /*
-         6---7
+         4---5
         /|  /|
        2---3 |
-       | 4-|-5
+       | 6-|-7
        |/  |/ 
        0---1
         
@@ -54,11 +55,11 @@ public class Cube extends BaseMesh implements ITransformable{
         return vertices;
     }
     
-    public Cube(Coordinate3D leftBottomFront, float length, float height, float depth){
+    public CubeMesh(Coordinate3D leftBottomFront, float length, float height, float depth){
         this(computeVertices(leftBottomFront, length, height, depth));
     }
     
-    public Cube(Coordinate3D[] vertices){
+    public CubeMesh(Coordinate3D[] vertices){
         super(vertices, MeshType.Quad);
         
         //1 for each face

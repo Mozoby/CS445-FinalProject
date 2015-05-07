@@ -1,6 +1,7 @@
 
 package edu.cpp.cs445;
 
+import edu.cpp.cs445.mesh.IDrawable;
 import static org.lwjgl.opengl.GL11.glVertex3f;
 
 /**

@@ -7,7 +7,7 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
-
+lib/
 # Class Files #
 *.class
 

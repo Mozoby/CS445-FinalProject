@@ -3,6 +3,7 @@
  */
 package edu.cpp.cs445;
 
+import edu.cpp.cs445.mesh.CubeMesh;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -15,7 +16,7 @@ public class FPCameraController {
     //3d vector to store the camera's position in
     private Vector3f position = null;
     private Vector3f lPosition = null;
-    private Cube c;
+    private CubeMesh c;
     
     //the rotation around the Y axis of the camera
     private float yaw = 0.0f;
@@ -32,7 +33,7 @@ public class FPCameraController {
         lPosition.y = 15f;
         lPosition.z = 0f;
         
-        c = new Cube(new Coordinate3D(-50,-50,-200), 100, 100, 100);
+        c = new CubeMesh(new Coordinate3D(-50,-50,-200), 100, 100, 100);
     }
     
     //increment the camera's current yaw rotation
