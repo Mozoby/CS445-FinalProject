@@ -1,3 +1,5 @@
+package edu.cpp.cs445.noise;
+
 import java.util.Random;
 
 public class SimplexNoise {

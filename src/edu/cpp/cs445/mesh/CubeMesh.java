@@ -59,6 +59,10 @@ public class CubeMesh extends BaseMesh implements ITransformable{
         this(computeVertices(leftBottomFront, length, height, depth));
     }
     
+    public CubeMesh(Coordinate3D leftBottomFront, float size){
+        this(computeVertices(leftBottomFront, size, size, size));
+    }
+    
     public CubeMesh(Coordinate3D[] vertices){
         super(vertices, MeshType.Quad);
         
