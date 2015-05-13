@@ -14,6 +14,8 @@ import static org.lwjgl.opengl.GL11.glColor3f;
  */
 public class CubeMesh extends BaseMesh implements ITransformable{
     
+    
+    
     private Coordinate3D scale;
     private Coordinate3D translation;
     private Float rotationAngle;
