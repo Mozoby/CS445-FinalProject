@@ -5,10 +5,13 @@
  */
 package edu.cpp.cs445.mesh;
 
+import org.newdawn.slick.opengl.Texture;
+
 /**
  *
  * @author Bryan Thornbury
  */
 public interface IDrawable {
     public void draw();
+    public void setTexture(Texture texture, int textureCubeSize);
 }

@@ -5,8 +5,11 @@
  */
 package edu.cpp.cs445.mesh;
 
+import edu.cpp.cs445.Coordinate2D;
 import edu.cpp.cs445.Coordinate3D;
-import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.Texture;
 
 /**
  *
@@ -14,7 +17,30 @@ import static org.lwjgl.opengl.GL11.glColor3f;
  */
 public class CubeMesh extends BaseMesh implements ITransformable{
     
+    private static int[] textureMap;
     
+    static {
+        // 0 - Front
+        // 1 - Top
+        // 2 - Back
+        // 3 - Bottom
+        // 4 - Left
+        // 5 - Right
+        textureMap = new int[6];
+        
+        textureMap[0] = 0;
+        textureMap[1] = 1;
+        textureMap[2] = 0;
+        textureMap[3] = 2;
+        textureMap[4] = 0;
+        textureMap[5] = 0;
+    }
+    
+    private Texture texture;
+    private int textureCubeSize; // T
+    private Coordinate2D[][] textureVertices;
+    
+    private CubeType type;
     
     private Coordinate3D scale;
     private Coordinate3D translation;
@@ -22,6 +48,10 @@ public class CubeMesh extends BaseMesh implements ITransformable{
     private Coordinate3D rotationPivot;
     
     private Coordinate3D[] colors;
+    
+    //The Texture map holds the indice
+    // in the texture array for each
+    // face of the cube.
     
     //lBoF : left bottom front (x y z)
     // r : right
@@ -57,16 +87,20 @@ public class CubeMesh extends BaseMesh implements ITransformable{
         return vertices;
     }
     
-    public CubeMesh(Coordinate3D leftBottomFront, float length, float height, float depth){
-        this(computeVertices(leftBottomFront, length, height, depth));
+    
+    
+    public CubeMesh(Coordinate3D leftBottomFront, float length, float height, float depth, CubeType type){
+        this(computeVertices(leftBottomFront, length, height, depth), type);
     }
     
-    public CubeMesh(Coordinate3D leftBottomFront, float size){
-        this(computeVertices(leftBottomFront, size, size, size));
+    public CubeMesh(Coordinate3D leftBottomFront, float size, CubeType type){
+        this(computeVertices(leftBottomFront, size, size, size), type);
     }
     
-    public CubeMesh(Coordinate3D[] vertices){
+    public CubeMesh(Coordinate3D[] vertices, CubeType type){
         super(vertices, MeshType.Quad);
+        
+        this.type = type;
         
         //1 for each face
       
@@ -81,29 +115,79 @@ public class CubeMesh extends BaseMesh implements ITransformable{
     }
     
     
+    private void computeTextureVertices(){
+        int T = this.textureCubeSize;
+        int y = this.type.getTextureYIndex();
+        
+        int bY = T * y;
+        int tY = bY + T;
+        
+        float width = texture.getTextureWidth();
+        float height = texture.getTextureHeight();
+        
+        //In same order as textureMap
+        this.textureVertices = new Coordinate2D[6][4];
+        
+        for(int i = 0; i < 4; ++i){
+            int lX = textureMap[i] * T;
+            int rX = lX + T;
+            
+            textureVertices[i][0] = new Coordinate2D(lX / width, bY / height);
+            textureVertices[i][1] = new Coordinate2D(rX / width, bY / height);
+            textureVertices[i][2] = new Coordinate2D(lX / width, tY / height);
+            textureVertices[i][3] = new Coordinate2D(rX / width, tY / height);
+        }
+        
+        for(int i = 4; i < 6; ++i){
+            int lX = textureMap[i] * T;
+            int rX = lX + T;
+            
+            
+            textureVertices[i][0] = new Coordinate2D(lX / width, tY / height);
+            textureVertices[i][1] = new Coordinate2D(lX / width, bY / height);
+            textureVertices[i][2] = new Coordinate2D(rX / width, bY / height);
+            textureVertices[i][3] = new Coordinate2D(rX / width, tY / height);
+        }
+    }
     
     @Override
     public void draw(){
         //Custom cube draw algo
         //Condenses 24 vertices of 4 different quads into only 8
         int c = 1;
-        
+        this.texture.bind();
         for(int b = 0; b < 8; b+=2){
             
-            glColor3f(colors[c].getX(), colors[c].getY(), colors[c].getZ());
+            //glColor3f(colors[c].getX(), colors[c].getY(), colors[c].getZ());
+            
+            glTexCoord2f(textureVertices[c-1][0].getX(), textureVertices[c-1][0].getY());
             vertList.get(b).draw();
+            
+            glTexCoord2f(textureVertices[c-1][1].getX(), textureVertices[c-1][1].getY());
             vertList.get(b + 1).draw();
+            
+            glTexCoord2f(textureVertices[c-1][2].getX(), textureVertices[c-1][2].getY());
             vertList.get((b + 3) % vertList.size()).draw();
+            
+            glTexCoord2f(textureVertices[c-1][3].getX(), textureVertices[c-1][3].getY());
             vertList.get((b + 2) % vertList.size()).draw();
             c++;
         }
         
         //left and rigth
         for(int b = 0; b < 2; b++){
-            glColor3f(colors[c].getX(), colors[c].getY(), colors[c].getZ());
+            //glColor3f(colors[c].getX(), colors[c].getY(), colors[c].getZ());
+            
+            glTexCoord2f(textureVertices[c-1][0].getX(), textureVertices[c-1][0].getY());
             vertList.get(b).draw();
+            
+            glTexCoord2f(textureVertices[c-1][1].getX(), textureVertices[c-1][1].getY());
             vertList.get(b + 2).draw();
+            
+            glTexCoord2f(textureVertices[c-1][2].getX(), textureVertices[c-1][2].getY());
             vertList.get(b + 4).draw();
+            
+            glTexCoord2f(textureVertices[c-1][3].getX(), textureVertices[c-1][3].getY());
             vertList.get(b + 6).draw();
             c++;
         }
@@ -144,5 +228,13 @@ public class CubeMesh extends BaseMesh implements ITransformable{
     public Coordinate3D getScale() {
         return this.scale;
    }
+
+    @Override
+    public void setTexture(Texture texture, int textureCubeSize) {
+        this.texture = texture;
+        this.textureCubeSize = textureCubeSize;
+        computeTextureVertices();
+    }
+    
     
 }

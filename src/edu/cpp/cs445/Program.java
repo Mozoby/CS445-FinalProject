@@ -25,25 +25,32 @@ public class Program {
     // private static final Integer WIDTH = 640;
     // private static final Integer HEIGHT = 480;
     
-    private FPCameraController fp = new FPCameraController(0f,0f,0f);
+    private FPCameraController fp;
     private DisplayMode displayMode;
     
     
     //Simply set up the opengl viewport and Display
     public void start(){
-         
+        
          try {
             createWindow();
             initGL();
-            fp.gameLoop(); 
         } catch (Exception e) {
             e.printStackTrace();
             Display.destroy();
             System.exit(1);
         }
          
- 
          
+        fp = new FPCameraController(0f,0f,-5f);
+        
+        try {
+            fp.gameLoop(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
+        }
     }
     
     private void createWindow() throws Exception{
@@ -62,6 +69,8 @@ public class Program {
     }
     
     private void initGL(){
+        glEnable(GL_TEXTURE_2D);
+        
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         
         glMatrixMode(GL_PROJECTION);

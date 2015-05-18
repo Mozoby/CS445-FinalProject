@@ -3,6 +3,7 @@ package edu.cpp.cs445;
 
 import edu.cpp.cs445.mesh.IDrawable;
 import static org.lwjgl.opengl.GL11.glVertex3f;
+import org.newdawn.slick.opengl.Texture;
 
 /**
  * Stores 3 floats that represent a point in 3d space.
@@ -50,5 +51,10 @@ public class Coordinate3D implements IDrawable{
     @Override
     public void draw() {
         glVertex3f(x,y,z);
+    }
+
+    @Override
+    public void setTexture(Texture texture, int textureCubeSize) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
