@@ -1,6 +1,8 @@
 package edu.cpp.cs445;
 
 
+import org.lwjgl.BufferUtils;
+import java.nio.FloatBuffer; 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -27,6 +29,9 @@ public class Program {
     
     private FPCameraController fp;
     private DisplayMode displayMode;
+    
+    private FloatBuffer lightPos;
+    private FloatBuffer wLight; 
     
     
     //Simply set up the opengl viewport and Display
@@ -68,6 +73,14 @@ public class Program {
 
     }
     
+    private void initLighting(){
+        lightPos = BufferUtils.createFloatBuffer(4);
+        lightPos.put(0.0f).put(0.0f).put(0.0f).put(1.0f).flip();
+        
+        wLight = BufferUtils.createFloatBuffer(4);
+        wLight.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip(); 
+    }
+    
     private void initGL(){
         glEnable(GL_TEXTURE_2D);
         
@@ -84,6 +97,14 @@ public class Program {
         // Accept fragment if it closer to the camera than the former one
         glDepthFunc(GL_LESS);
             
+        initLighting(); 
+        glLight(GL_LIGHT0, GL_POSITION, lightPos);
+        glLight(GL_LIGHT0, GL_SPECULAR, wLight);
+        glLight(GL_LIGHT0, GL_DIFFUSE, wLight);
+        glLight(GL_LIGHT0, GL_AMBIENT, wLight); 
+        
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0); 
     }
 public static void loop(){
     System.out.println("loop");
